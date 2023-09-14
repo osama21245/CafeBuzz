@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "618776264173",
+    "project_id": "dopamine-c2608",
+    "storage_bucket": "dopamine-c2608.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618776264173:android:773e95563afe81f9d23be4",
+        "android_client_info": {
+          "package_name": "cloud.osamagamil.dopamine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618776264173-cfjp93pqll4o3s3vl416si94irtpd5eo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cloud.osamagamil.dopamine",
+            "certificate_hash": "28ead12a7678abb5545f679df9e1c87a958de2df"
+          }
+        },
+        {
+          "client_id": "618776264173-7i1n9bscos5r3fsvpj1inji4fn86g463.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5beZjSP0ufR4jHCvsu8QK8Mm6UWgprDw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "618776264173-7i1n9bscos5r3fsvpj1inji4fn86g463.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
