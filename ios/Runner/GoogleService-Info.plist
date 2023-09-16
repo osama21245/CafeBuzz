@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>618776264173-n4mqudivnpl63iatlksv2ace2ni7nea6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.618776264173-n4mqudivnpl63iatlksv2ace2ni7nea6</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>618776264173-cfjp93pqll4o3s3vl416si94irtpd5eo.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCSqmqGkYXh_gWN18Bn19cQcJn7umR1lUI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>618776264173</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>cloud.osamagamil.dopamine</string>
+	<key>PROJECT_ID</key>
+	<string>dopamine-c2608</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dopamine-c2608.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:618776264173:ios:e17b604aeec84654d23be4</string>
+</dict>
+</plist>

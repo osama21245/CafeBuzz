@@ -124,13 +124,13 @@ class CommunityController extends StateNotifier<bool> {
   void joinCommunity(Community community, BuildContext context) async {
     final user = _ref.read(usersProvider)!;
 
-    Either<Failure, void> res;
+    var res;
     if (community.members.contains(user.uid)) {
-      res = (await _communityRepository.leaveCommunity(
-          community.name, user.uid)) as Either<Failure, void>;
+      res =
+          (await _communityRepository.leaveCommunity(community.name, user.uid));
     } else {
-      res = (await _communityRepository.joinCommunity(community.name, user.uid))
-          as Either<Failure, void>;
+      res =
+          (await _communityRepository.joinCommunity(community.name, user.uid));
     }
 
     res.fold((l) => showSnackBar(l.message, context), (r) {
