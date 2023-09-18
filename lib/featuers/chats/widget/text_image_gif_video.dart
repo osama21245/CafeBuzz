@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:call_me/core/enums/message_enum.dart';
-import 'package:call_me/featuers/chats/screen/widget/videoplayer.dart';
+import 'package:call_me/featuers/chats/repositories/messages_loading.dart';
+import 'package:call_me/featuers/chats/widget/videoplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import '../../../../core/models/message_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/models/message_model.dart';
+import '../repositories/messages_audio_loading.dart';
 
-class Text_Image_Video_Gif extends StatelessWidget {
+class Text_Image_Video_Gif extends ConsumerWidget {
   Message messages;
   String timesent;
   Text_Image_Video_Gif(
@@ -13,10 +18,13 @@ class Text_Image_Video_Gif extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loading = ref.watch(AudioloadingProvider);
     Size size = MediaQuery.of(context).size;
     bool isplayRecord = false;
+
     final playRecord = AudioPlayer();
+
     return messages.type == MessageEnum.image
         ? Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,33 +56,41 @@ class Text_Image_Video_Gif extends StatelessWidget {
             ? StatefulBuilder(builder: (context, setState) {
                 return Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage(
-                              "assets/images/coffeepic2-removebg-logo.png"),
-                          radius: 25,
-                        ),
-                        Container(),
-                        IconButton(
-                            onPressed: () async {
-                              playRecord.play(UrlSource(messages.text));
-                            },
-                            icon: Icon(Icons.play_arrow)),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: AssetImage(
+                                "assets/images/coffeepic2-removebg-logo.png"),
+                            radius: 25,
+                          ),
+                          Spacer(),
+                          IconButton(
+                              onPressed: () async {
+                                if (loading == null) {
+                                  ref
+                                      .watch(AudioloadingProvider.notifier)
+                                      .update((state) => Loading(true));
+                                  playRecord.play(UrlSource(messages.text));
+                                } else {
+                                  ref
+                                      .watch(AudioloadingProvider.notifier)
+                                      .update((state) => null);
+                                }
+                              },
+                              icon: loading != null
+                                  ? Icon(Icons.pause)
+                                  : Icon(Icons.play_arrow)),
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            timesent,
-                            style: TextStyle(
-                                fontSize: 6,
-                                color: Color.fromARGB(218, 153, 182, 206)),
-                          ),
                           messages.isSeen
                               ? Icon(
                                   Icons.done_all,
@@ -84,6 +100,12 @@ class Text_Image_Video_Gif extends StatelessWidget {
                                   Icons.done,
                                   size: 12,
                                 ),
+                          Text(
+                            timesent,
+                            style: TextStyle(
+                                fontSize: 6,
+                                color: Color.fromARGB(218, 153, 182, 206)),
+                          ),
                         ],
                       ),
                     ),
@@ -108,12 +130,6 @@ class Text_Image_Video_Gif extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              timesent,
-                              style: TextStyle(
-                                  fontSize: 6,
-                                  color: Color.fromARGB(218, 153, 182, 206)),
-                            ),
                             messages.isSeen
                                 ? Icon(
                                     Icons.done_all,
@@ -123,6 +139,12 @@ class Text_Image_Video_Gif extends StatelessWidget {
                                     Icons.done,
                                     size: 12,
                                   ),
+                            Text(
+                              timesent,
+                              style: TextStyle(
+                                  fontSize: 6,
+                                  color: Color.fromARGB(218, 153, 182, 206)),
+                            ),
                           ],
                         ),
                       )

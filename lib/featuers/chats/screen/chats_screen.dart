@@ -19,6 +19,12 @@ class ChatScreen extends ConsumerWidget {
       Routemaster.of(context).push('/u/$uid');
     }
 
+    void chatScreenSeen(WidgetRef ref, String reciverId) {
+      ref
+          .watch(ChatControllerProider.notifier)
+          .ChatScreenSeen(reciverId, context);
+    }
+
     final user = ref.watch(usersProvider);
     return Scaffold(
       appBar: AppBar(
@@ -59,6 +65,7 @@ class ChatScreen extends ConsumerWidget {
                                 builder: (context) => MessagesScreen(
                                       uid: chats.contactId,
                                     )));
+                            chatScreenSeen(ref, chats.contactId);
                           },
                           leading: InkWell(
                             onTap: () =>
@@ -80,13 +87,25 @@ class ChatScreen extends ConsumerWidget {
                               ),
                               Text(
                                 timesent,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
+                                style: chats.isSeen == false
+                                    ? TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold)
+                                    : TextStyle(
+                                        color: Colors.grey, fontSize: 12),
                               )
                             ],
                           ),
-                          subtitle: Text(chats.lastMessage),
-                          trailing: Icon(Icons.more_vert),
+                          subtitle: chats.isSeen == false
+                              ? Text(
+                                  chats.lastMessage,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              : Text(chats.lastMessage),
+                          trailing: chats.isSeen == false
+                              ? Icon(Icons.circle)
+                              : Icon(Icons.more_vert),
                         );
                       });
                 },

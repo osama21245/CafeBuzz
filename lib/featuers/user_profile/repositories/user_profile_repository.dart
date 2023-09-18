@@ -102,6 +102,7 @@ class UserProfileRepository {
     DateTime timeSent,
   ) async {
     Chats reciverChatData = Chats(
+        isSeen: true,
         name: reciverData.name,
         profilepic: reciverData.profilePic,
         contactId: reciverData.uid,
@@ -115,6 +116,7 @@ class UserProfileRepository {
         .set(reciverChatData.toMap());
 
     Chats senderChatData = Chats(
+        isSeen: false,
         name: senderData.name,
         profilepic: senderData.profilePic,
         contactId: senderData.uid,
@@ -201,6 +203,30 @@ class UserProfileRepository {
           senderUser, reciverUserData, text, sentTime));
     } on FirebaseException catch (e) {
       throw e.toString();
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  Future<Either<dynamic, void>> follow(String myId, String userId) async {
+    try {
+      return right(await _users.doc(userId).update({
+        'followers': FieldValue.arrayUnion([myId]),
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  Future<Either<dynamic, void>> unfollow(String myId, String userId) async {
+    try {
+      return right(await _users.doc(userId).update({
+        'followers': FieldValue.arrayRemove([myId]),
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
     } catch (e) {
       return left(Failure(e.toString()));
     }

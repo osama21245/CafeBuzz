@@ -1,10 +1,10 @@
 import 'package:call_me/core/models/message_model.dart';
 import 'package:call_me/featuers/auth/controller/auth_controller.dart';
-import 'package:call_me/featuers/chats/screen/widget/text_image_gif_video.dart';
+import 'package:call_me/featuers/chats/widget/text_image_gif_video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/enums/message_enum.dart';
+import '../../../core/enums/message_enum.dart';
 import 'text_image_gif_video_replay.dart';
 
 class ReplayedMessageForm extends ConsumerWidget {

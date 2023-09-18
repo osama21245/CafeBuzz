@@ -53,7 +53,7 @@ class AuthRepository {
       UserModel userModel;
       if (userCredential.additionalUserInfo!.isNewUser) {
         userModel = UserModel(
-            // ingroup: [],
+            ingroup: [],
             isonline: false,
             name: userCredential.user!.displayName ?? "No Name",
             profilePic:
@@ -62,6 +62,7 @@ class AuthRepository {
             uid: userCredential.user!.uid,
             isAuthanticated: true,
             karma: 0,
+            followers: [],
             awards: ['gold']);
         await _users.doc(userCredential.user!.uid).set(userModel.toMap());
       } else {
@@ -80,16 +81,16 @@ class AuthRepository {
       var userCredential = await _auth.signInAnonymously();
 
       UserModel userModel = UserModel(
-        name: 'Guest',
-        profilePic: Constants.avatarDefault,
-        banner: Constants.bannerDefault,
-        uid: userCredential.user!.uid,
-        isAuthanticated: false,
-        karma: 0,
-        awards: [],
-        isonline: false,
-        //  ingroup: []
-      );
+          followers: [],
+          name: 'Guest',
+          profilePic: Constants.avatarDefault,
+          banner: Constants.bannerDefault,
+          uid: userCredential.user!.uid,
+          isAuthanticated: false,
+          karma: 0,
+          awards: [],
+          isonline: false,
+          ingroup: []);
 
       await _users.doc(userCredential.user!.uid).set(userModel.toMap());
 

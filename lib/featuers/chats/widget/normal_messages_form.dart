@@ -3,7 +3,7 @@ import 'package:call_me/featuers/auth/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/models/message_model.dart';
+import '../../../core/models/message_model.dart';
 import 'text_image_gif_video.dart';
 
 class NormalMessagesForm extends ConsumerWidget {

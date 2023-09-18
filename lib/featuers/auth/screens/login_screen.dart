@@ -19,6 +19,7 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isloading = ref.watch(authControllerProvider);
+    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +43,7 @@ class LoginScreen extends ConsumerWidget {
           ? const Loader()
           : Column(
               children: [
-                const SizedBox(height: 30),
+                SizedBox(height: size.height * 0.05),
                 const Text(
                   'Dive into anything',
                   style: TextStyle(
@@ -51,15 +52,15 @@ class LoginScreen extends ConsumerWidget {
                     letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: size.height * 0.08),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
                     Constants.loginEmotePath,
-                    height: 400,
+                    width: size.width * 0.9,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: size.height * 0.06),
                 SignInButton(),
               ],
             ),

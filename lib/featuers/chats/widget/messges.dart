@@ -1,17 +1,17 @@
 import 'package:call_me/featuers/chats/controller/chat_controller.dart';
 import 'package:call_me/featuers/chats/repositories/messages_reply.dart';
-import 'package:call_me/featuers/chats/screen/widget/replayed_message_form.dart';
-import 'package:call_me/featuers/chats/screen/widget/text_image_gif_video.dart';
+import 'package:call_me/featuers/chats/widget/replayed_message_form.dart';
+import 'package:call_me/featuers/chats/widget/text_image_gif_video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:swipe_to/swipe_to.dart';
 
-import '../../../../core/common/error_text.dart';
-import '../../../../core/common/loader.dart';
-import '../../../../core/enums/message_enum.dart';
-import '../../../auth/controller/auth_controller.dart';
-import '../../../user_profile/controller/user_profile_controller.dart';
+import '../../../core/common/error_text.dart';
+import '../../../core/common/loader.dart';
+import '../../../core/enums/message_enum.dart';
+import '../../auth/controller/auth_controller.dart';
+import '../../user_profile/controller/user_profile_controller.dart';
 import 'normal_messages_form.dart';
 
 class MessageBubble extends ConsumerWidget {

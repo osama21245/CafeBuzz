@@ -1,7 +1,8 @@
+import 'package:call_me/core/enums/message_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../repositories/messages_reply.dart';
+import '../repositories/messages_reply.dart';
 
 class MessageReplyPreview extends ConsumerWidget {
   MessagesReply messageReply;
@@ -29,7 +30,13 @@ class MessageReplyPreview extends ConsumerWidget {
               children: [
                 Column(
                   children: [
-                    Text(messageReply.message, maxLines: 1),
+                    Text(
+                      messageReply.messageType == MessageEnum.image
+                          ? "Your Image"
+                          : messageReply.messageType == MessageEnum.image
+                              ? "Your Video"
+                              :  messageReply.messageType == MessageEnum.audio ? "Voice" : messageReply.message,
+                    ),
                   ],
                 ),
                 IconButton.filled(

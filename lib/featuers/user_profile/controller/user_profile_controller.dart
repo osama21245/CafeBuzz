@@ -142,4 +142,17 @@ class UserProfileController extends StateNotifier<bool> {
     res.fold((l) => null,
         (r) => _ref.read(usersProvider.notifier).update((state) => user));
   }
+
+  void follow(UserModel usermodel, BuildContext context) async {
+    final user = _ref.read(usersProvider)!;
+
+    var res;
+    if (usermodel.followers.contains(user.uid)) {
+      res = (await _userProfileRepository.unfollow(user.uid, usermodel.uid));
+    } else {
+      res = (await _userProfileRepository.follow(user.uid, usermodel.uid));
+    }
+
+    res.fold((l) => showSnackBar(l.message, context), (r) {});
+  }
 }

@@ -26,7 +26,7 @@ class ModToolsScreen extends StatelessWidget {
               navigateAddModerator(context);
             },
             leading: Icon(Icons.add_moderator),
-            title: Text("Add Moderators"),
+            title: Text("Add Admins"),
           ),
           ListTile(
             leading: Icon(Icons.edit),

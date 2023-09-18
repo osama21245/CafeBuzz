@@ -12,7 +12,8 @@ class UserModel {
   final bool isAuthanticated;
   final int karma;
   final bool isonline;
-//  final List<String> ingroup;
+  final List<String> followers;
+  final List<String> ingroup;
   final List<String> awards;
   UserModel({
     required this.name,
@@ -22,7 +23,8 @@ class UserModel {
     required this.isAuthanticated,
     required this.karma,
     required this.isonline,
-    //required this.ingroup,
+    required this.ingroup,
+    required this.followers,
     required this.awards,
   });
 
@@ -34,7 +36,8 @@ class UserModel {
     bool? isAuthanticated,
     int? karma,
     bool? isonline,
-    //  List<String>? ingroup,
+    List<String>? ingroup,
+    List<String>? followers,
     List<String>? awards,
   }) {
     return UserModel(
@@ -45,7 +48,8 @@ class UserModel {
       isAuthanticated: isAuthanticated ?? this.isAuthanticated,
       karma: karma ?? this.karma,
       isonline: isonline ?? this.isonline,
-      // ingroup: ingroup ?? this.ingroup,
+      ingroup: ingroup ?? this.ingroup,
+      followers: followers ?? this.followers,
       awards: awards ?? this.awards,
     );
   }
@@ -59,7 +63,8 @@ class UserModel {
       'isAuthanticated': isAuthanticated,
       'karma': karma,
       'isonline': isonline,
-      //'ingroup': ingroup,
+      "followers": followers,
+      'ingroup': ingroup,
       'awards': awards,
     };
   }
@@ -70,10 +75,14 @@ class UserModel {
     // Convert the List<dynamic> to List<String>
     List<String> awardslist = awards.cast<String>();
 
-    // List<dynamic> ingroup = map['ingroup'] as List<dynamic>;
+    List<dynamic> followers = map['followers'] as List<dynamic>;
 
-    // // Convert the List<dynamic> to List<String>
-    // List<String> ingrouplist = ingroup.cast<String>();
+    List<String> followersList = followers.cast<String>();
+
+    List<dynamic> ingroup = map['ingroup'] as List<dynamic>;
+
+    // Convert the List<dynamic> to List<String>
+    List<String> ingrouplist = ingroup.cast<String>();
 
     return UserModel(
       name: map['name'] as String,
@@ -83,14 +92,15 @@ class UserModel {
       isAuthanticated: map['isAuthanticated'] as bool,
       karma: map['karma'] as int,
       isonline: map['isonline'] as bool,
-      //  ingroup: ingrouplist,
+      followers: followersList,
+      ingroup: ingrouplist,
       awards: awardslist,
     );
   }
 
   @override
   String toString() {
-    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, uid: $uid, isAuthanticated: $isAuthanticated, karma: $karma, isonline: $isonline, , awards: $awards)';
+    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, uid: $uid, isAuthanticated: $isAuthanticated, karma: $karma, isonline: $isonline, , awards: $awards,followers:$followers, ingroup :$ingroup)';
   }
 
   @override
@@ -104,8 +114,9 @@ class UserModel {
         other.isAuthanticated == isAuthanticated &&
         other.karma == karma &&
         other.isonline == isonline &&
-        // listEquals(other.ingroup, ingroup) &&
-        listEquals(other.awards, awards);
+        listEquals(other.ingroup, ingroup) &&
+        listEquals(other.awards, awards) &&
+        listEquals(other.followers, followers);
   }
 
   @override
@@ -118,6 +129,7 @@ class UserModel {
         karma.hashCode ^
         isonline.hashCode ^
         //   ingroup.hashCode ^
+        followers.hashCode ^
         awards.hashCode;
   }
 

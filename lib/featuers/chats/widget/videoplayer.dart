@@ -45,7 +45,7 @@ class _MessageVideoPlayerState extends State<MessageVideoPlayer> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: AspectRatio(
-          aspectRatio: 16 / 9,
+          aspectRatio: 5 / 5,
           child: Stack(
             children: [
               CachedVideoPlayer(cachedVideoPlayerController!),

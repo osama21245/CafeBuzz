@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:call_me/core/enums/message_enum.dart';
-import 'package:call_me/featuers/chats/screen/widget/videoplayer.dart';
+import 'package:call_me/featuers/chats/widget/videoplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import '../../../../core/models/message_model.dart';
+import '../../../core/models/message_model.dart';
 
 class Text_Image_Video_Replay extends StatelessWidget {
   Message messages;

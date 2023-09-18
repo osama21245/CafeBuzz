@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:call_me/core/models/user_model.dart';
 import 'package:call_me/featuers/auth/controller/auth_controller.dart';
 import 'package:call_me/featuers/chats/screen/messages_screen.dart';
 import 'package:call_me/featuers/user_profile/controller/user_profile_controller.dart';
@@ -23,6 +24,12 @@ class UserProfileScreen extends ConsumerWidget {
   navigateToMessages(String uid, BuildContext context, String profile,
       String karma, String name) {
     Routemaster.of(context).push("/messages/$name/$uid/$profile/$karma");
+  }
+
+  follow(WidgetRef ref, UserModel usermodel, BuildContext context) {
+    ref
+        .watch(userProfileControllerProvider.notifier)
+        .follow(usermodel, context);
   }
 
   @override
@@ -105,17 +112,49 @@ class UserProfileScreen extends ConsumerWidget {
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 25),
+                                          horizontal: 20),
                                     ),
                                     child: const Text('Messages'),
                                   ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Text(
-                                '${user.karma} caffeine',
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Text(
+                                        '${user.karma} caffeine',
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Text(
+                                        '${user.followers.isEmpty ? "0" : user.followers.length}  Followers',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                OutlinedButton(
+                                  onPressed: () => follow(ref, user, context),
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                  ),
+                                  child:
+                                      user.followers.contains(currentuser.uid)
+                                          ? Text('Following')
+                                          : Text('Follow'),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 10),
                             const Divider(thickness: 2),

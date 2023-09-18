@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/enums/message_enum.dart';
+import '../../../core/models/call.dart';
 import '../../../core/providers/firebase_providers.dart';
 import '../../../core/type_def.dart';
 import 'messages_reply.dart';
@@ -35,6 +36,12 @@ class ChatRepositories {
         _auth = auth,
         _storageRepository = storageRepository;
 
+  CollectionReference get _call => _firestore.collection("call");
+
+  Stream<DocumentSnapshot> getcalls(String uid) {
+    return _call.doc(uid).snapshots();
+  }
+
   _saveDateToChatsSubColletion(
     UserModel senderData,
     UserModel reciverData,
@@ -42,6 +49,7 @@ class ChatRepositories {
     DateTime timeSent,
   ) async {
     Chats reciverChatData = Chats(
+        isSeen: true,
         name: reciverData.name,
         profilepic: reciverData.profilePic,
         contactId: reciverData.uid,
@@ -56,6 +64,7 @@ class ChatRepositories {
         .set(reciverChatData.toMap());
 
     Chats senderChatData = Chats(
+        isSeen: false,
         name: senderData.name,
         profilepic: senderData.profilePic,
         contactId: senderData.uid,
@@ -198,6 +207,51 @@ class ChatRepositories {
           .collection("messages")
           .doc(messageId)
           .update({"isSeen": true}));
+    } on FirebaseException catch (e) {
+      throw e.toString();
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid makeCall(
+    Call callerData,
+    Call reciverCallData,
+  ) async {
+    try {
+      await _call.doc(callerData.callerId).set(callerData.toMap());
+      return right(await _call
+          .doc(reciverCallData.callerId)
+          .set(reciverCallData.toMap()));
+    } on FirebaseException catch (e) {
+      throw e.toString();
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid ChatScreenSeen(String senderId, String reciverId) async {
+    try {
+      return right(await _firestore
+          .collection("users")
+          .doc(senderId)
+          .collection("chats")
+          .doc(reciverId)
+          .update({"isSeen": true}));
+    } on FirebaseException catch (e) {
+      throw e.toString();
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid endCall(
+    String callerID,
+    String reciverCallId,
+  ) async {
+    try {
+      await _call.doc(callerID).delete();
+      return right(await _call.doc(reciverCallId).delete());
     } on FirebaseException catch (e) {
       throw e.toString();
     } catch (e) {

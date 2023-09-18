@@ -1,14 +1,16 @@
 import 'dart:io';
+import 'package:call_me/core/common/loader.dart';
+import 'package:call_me/featuers/chats/repositories/messages_loading.dart';
 import 'package:call_me/featuers/chats/repositories/messages_reply.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../../core/enums/message_enum.dart';
-import '../../../../core/utils.dart';
-import '../../../user_profile/controller/user_profile_controller.dart';
-import '../../controller/chat_controller.dart';
+import '../../../core/enums/message_enum.dart';
+import '../../../core/utils.dart';
+import '../../user_profile/controller/user_profile_controller.dart';
+import '../controller/chat_controller.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_sound_record/flutter_sound_record.dart';
 
@@ -17,12 +19,15 @@ import 'message_replay_preview.dart';
 class MssagesTextField extends ConsumerStatefulWidget {
   TextEditingController message;
   ScrollController scrollController;
+  FocusNode focusNode;
+
   final String uid;
   MssagesTextField(
       {super.key,
       required this.message,
       required this.scrollController,
-      required this.uid});
+      required this.uid,
+      required this.focusNode});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -33,7 +38,6 @@ class _MssagesTextFieldState extends ConsumerState<MssagesTextField> {
   bool isShowEmojiContainer = false;
   bool isSountInit = false;
   bool? isRecord = false;
-  FocusNode focusNode = FocusNode();
   FlutterSoundRecord? _flutterSoundRecorder;
 
   @override
@@ -70,8 +74,8 @@ class _MssagesTextFieldState extends ConsumerState<MssagesTextField> {
     });
   }
 
-  void hideKeyboard() => focusNode.unfocus();
-  void showKeyboard() => focusNode.requestFocus();
+  void hideKeyboard() => widget.focusNode.unfocus();
+  void showKeyboard() => widget.focusNode.requestFocus();
 
   void toggleEmojiKeyboardContainer() {
     if (!isShowEmojiContainer) {
@@ -102,7 +106,7 @@ class _MssagesTextFieldState extends ConsumerState<MssagesTextField> {
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.scrollController
-            .jumpTo(widget.scrollController.position.maxScrollExtent);
+            .jumpTo(widget.scrollController.position.minScrollExtent);
       });
     } else {
       if (!isSountInit) {
@@ -113,21 +117,27 @@ class _MssagesTextFieldState extends ConsumerState<MssagesTextField> {
         if (isRecord!) {
           await _flutterSoundRecorder!.stop();
           sendFile(File(path), MessageEnum.audio);
+          setState(() {
+            isRecord = !isRecord!;
+          });
         } else {
-          await _flutterSoundRecorder!.start(
+          _flutterSoundRecorder!.start(
               path: path,
               bitRate: 192000,
               samplingRate: 48000.0,
               encoder: AudioEncoder.AAC);
+          setState(() {
+            isRecord = !isRecord!;
+          });
         }
-        setState(() {
-          isRecord = !isRecord!;
-        });
+
+        // await Future.delayed(Duration(seconds: 3));
+        // ref.watch(loadingProvider.notifier).update((state) => null);
       }
     }
   }
 
-  void sendFile(
+  sendFile(
     File image,
     MessageEnum messageEnum,
   ) {
@@ -141,46 +151,51 @@ class _MssagesTextFieldState extends ConsumerState<MssagesTextField> {
   }
 
   void sendImage() async {
+    ref.watch(loadingProvider.notifier).update((state) => Loading(true));
     setState(() {});
     final image = await pickImageFromGallery(context);
     if (image != null) {
-      sendFile(
+      await sendFile(
         image!,
         MessageEnum.image,
       );
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.scrollController
-            .jumpTo(widget.scrollController.position.maxScrollExtent);
+            .jumpTo(widget.scrollController.position.minScrollExtent);
       });
     }
-    setState(() {});
+    await Future.delayed(Duration(seconds: 13));
+    ref.watch(loadingProvider.notifier).update((state) => null);
   }
 
   void sendvideo() async {
-    setState(() {});
+    ref.watch(loadingProvider.notifier).update((state) => Loading(true));
     final video = await pickVideoFromGallery(context);
     if (video != null) {
-      sendFile(
+      await sendFile(
         video!,
         MessageEnum.video,
       );
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.scrollController
-            .jumpTo(widget.scrollController.position.maxScrollExtent);
+            .jumpTo(widget.scrollController.position.minScrollExtent);
       });
     }
-    setState(() {});
+    await Future.delayed(Duration(seconds: 23));
+    ref.watch(loadingProvider.notifier).update((state) => null);
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final reply = ref.watch(messageReplyProvider);
+    final loading = ref.watch(loadingProvider);
     bool isloading = false;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
+          if (loading != null) Loader(),
           if (reply != null)
             MessageReplyPreview(
               messageReply: reply!,
@@ -189,7 +204,7 @@ class _MssagesTextFieldState extends ConsumerState<MssagesTextField> {
             children: [
               Expanded(
                 child: TextFormField(
-                  focusNode: focusNode,
+                  focusNode: widget.focusNode,
                   controller: widget.message,
                   onChanged: (val) {
                     if (val.isNotEmpty) {
@@ -251,12 +266,10 @@ class _MssagesTextFieldState extends ConsumerState<MssagesTextField> {
                                           Icons.close,
                                           size: 25,
                                         )
-                                      : isloading
-                                          ? CircularProgressIndicator()
-                                          : Icon(
-                                              Icons.mic,
-                                              size: 25,
-                                            )),
+                                      : Icon(
+                                          Icons.mic,
+                                          size: 25,
+                                        )),
                         ],
                       ),
                     ),

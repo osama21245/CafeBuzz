@@ -7,12 +7,14 @@ class Chats {
   final String contactId;
   final DateTime timeSent;
   final String lastMessage;
+  final bool isSeen;
   Chats({
     required this.name,
     required this.profilepic,
     required this.contactId,
     required this.timeSent,
     required this.lastMessage,
+    required this.isSeen,
   });
 
   Chats copyWith({
@@ -21,6 +23,7 @@ class Chats {
     String? contactId,
     DateTime? timeSent,
     String? lastMessage,
+    bool? isSeen,
   }) {
     return Chats(
       name: name ?? this.name,
@@ -28,6 +31,7 @@ class Chats {
       contactId: contactId ?? this.contactId,
       timeSent: timeSent ?? this.timeSent,
       lastMessage: lastMessage ?? this.lastMessage,
+      isSeen: isSeen ?? this.isSeen,
     );
   }
 
@@ -38,6 +42,7 @@ class Chats {
       'contactId': contactId,
       'timeSent': timeSent.millisecondsSinceEpoch,
       'lastMessage': lastMessage,
+      'isSeen': isSeen,
     };
   }
 
@@ -48,12 +53,13 @@ class Chats {
       contactId: map['contactId'] as String,
       timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent'] as int),
       lastMessage: map['lastMessage'] as String,
+      isSeen: map['isSeen'] as bool,
     );
   }
 
   @override
   String toString() {
-    return 'Chats(name: $name, profilepic: $profilepic, contactId: $contactId, timeSent: $timeSent,  lastMessage: $lastMessage)';
+    return 'Chats(name: $name, profilepic: $profilepic, contactId: $contactId, timeSent: $timeSent, lastMessage: $lastMessage, isSeen: $isSeen)';
   }
 
   @override
@@ -64,7 +70,8 @@ class Chats {
         other.profilepic == profilepic &&
         other.contactId == contactId &&
         other.timeSent == timeSent &&
-        other.lastMessage == lastMessage;
+        other.lastMessage == lastMessage &&
+        other.isSeen == isSeen;
   }
 
   @override
@@ -73,6 +80,12 @@ class Chats {
         profilepic.hashCode ^
         contactId.hashCode ^
         timeSent.hashCode ^
-        lastMessage.hashCode;
+        lastMessage.hashCode ^
+        isSeen.hashCode;
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory Chats.fromJson(String source) =>
+      Chats.fromMap(json.decode(source) as Map<String, dynamic>);
 }
