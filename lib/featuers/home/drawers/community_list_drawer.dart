@@ -28,46 +28,40 @@ class CommunityListDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(usersProvider)!;
-    bool isGuest = !user.isAuthanticated;
     return Drawer(
       child: SafeArea(
         child: Column(
           children: [
-            isGuest
-                ? SignInButton(
-                    isFromLogin: true,
-                  )
-                : ListTile(
-                    title: const Text('Create a community'),
-                    leading: const Icon(Icons.add),
-                    onTap: () => navigateToCreateCommunity(context),
-                  ),
-            if (!isGuest)
-              ref.watch(UserCommunityProvider).when(
-                  data: (communites) => Expanded(
-                        child: ListView.builder(
-                            itemCount: communites.length,
-                            itemBuilder: (context, index) {
-                              final community = communites[index];
-                              return ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage: community.avatar !=
-                                          Constants.avatarDefault
-                                      ? CachedNetworkImageProvider(
-                                          community.avatar)
-                                      : CachedNetworkImageProvider(
-                                          Constants.avatarDefault),
-                                ),
-                                title: Text("r/${community.name}"),
-                                onTap: () {
-                                  navigateToCommunity(context, community);
-                                },
-                              );
-                            }),
-                      ),
-                  error: (error, StackTrace) =>
-                      ErrorText(error: error.toString()),
-                  loading: () => const Loader())
+            ListTile(
+              title: const Text('Create a community'),
+              leading: const Icon(Icons.add),
+              onTap: () => navigateToCreateCommunity(context),
+            ),
+            ref.watch(UserCommunityProvider).when(
+                data: (communites) => Expanded(
+                      child: ListView.builder(
+                          itemCount: communites.length,
+                          itemBuilder: (context, index) {
+                            final community = communites[index];
+                            return ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    community.avatar != Constants.avatarDefault
+                                        ? CachedNetworkImageProvider(
+                                            community.avatar)
+                                        : CachedNetworkImageProvider(
+                                            Constants.avatarDefault),
+                              ),
+                              title: Text("r/${community.name}"),
+                              onTap: () {
+                                navigateToCommunity(context, community);
+                              },
+                            );
+                          }),
+                    ),
+                error: (error, StackTrace) =>
+                    ErrorText(error: error.toString()),
+                loading: () => const Loader())
           ],
         ),
       ),

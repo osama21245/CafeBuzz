@@ -118,7 +118,7 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(18),
                     ),
-                    maxLength: 30,
+                    maxLength: 90,
                   ),
                   const SizedBox(height: 10),
                   if (isTypeImage)
